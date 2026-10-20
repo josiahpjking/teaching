@@ -1,0 +1,37 @@
+project:
+  type: website
+  render: 
+    - "*.qmd"
+    - "!working/*"
+    - "!working/bits/*"
+  output-dir: ./wipdocs/
+
+website:  
+  title: "LMM"
+  sidebar:
+    style: "floating"
+    search: true
+    collapse-level: 1
+    contents:
+      - 01_clustered.qmd
+      - 02_lmm.qmd
+      - section: "Additional Docs"
+        contents:
+          - 00_lm_assumpt.qmd
+          - csstests.qmd
+
+
+format:
+  html:
+    toc: true
+    toc_float: true
+    link-citations: true
+    theme: 
+      - cosmo
+      - assets/style-readings.scss
+    include-in-header: 
+      - text: |
+          <link rel="stylesheet" href="https://uoepsy.github.io/assets/css/ccfooter.css" />
+    number-sections: false
+
+
