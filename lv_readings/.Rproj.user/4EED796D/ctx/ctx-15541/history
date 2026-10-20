@@ -1,0 +1,512 @@
+x = sample(1:2,N,T)
+b = sample(letters[1:3],n_groups,T,prob=c(.3,.4,.3))
+b = b[g]
+res = MASS::mvrnorm(n=n_groups,
+mu=c(0,0),Sigma=matrix(c(2,0,0,.6),nrow=2))
+re0 = res[,1]
+re  = re0[g]
+rex = res[,2]
+re_x  = rex[g]
+lp = (-.5 + re) - (.4 + re_x)*scale(x)[,1] + 1.1*(b=="a")
+y_bin = rbinom(N, size = 1, prob = plogis(lp))
+y = lp + rnorm(N,0,1.3)
+df = data.frame(x = x, g=factor(g), b=b,y_bin)
+mnames = unique(randomNames::randomNames(n_groups*4,which.names="first"))
+monkeystatus = df |>
+transmute(
+status = ifelse(b=="a","subordinate",ifelse(b=="b","dominant","adolescent")),#cut(x,3,labels=letters[1:3]),
+difficulty = factor(x, labels=c("easy","difficult")),
+monkeyID = mnames[as.numeric(g)],
+probsolved = y_bin,
+probscore = round(scale(y)[,1]*10+50,1)
+) |> filter(!(monkeyID=="Richard" & difficulty=="easy"),
+!(monkeyID=="Nadheera" & difficulty=="difficult"))
+# library(lme4)
+m = glmer(probsolved ~ difficulty + status + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+summary(m)
+lmer(probscore ~ 1 + difficulty + status +
+(1 + difficulty | monkeyID),
+data=monkeystatus) |> summary()
+library(tidyverse)
+library(lme4)
+# TODO
+monkeystat <- monkeystatus
+head(monkeystat)
+mmod <- glmer(probsolved ~ difficulty + status +
+(1 + difficulty | monkeyID),
+data = monkeystat, family = binomial)
+summary(mmod)
+mmod0 <- glmer(probsolved ~ difficulty +
+(1 + difficulty | monkeyID),
+data = monkeystat, family = binomial)
+anova(mmod0, mmod)
+ss = 709233#round(runif(1,1e3,1e6))
+set.seed(ss)
+n_groups = 50
+# npgroup = round(runif(30,2,25))
+npgroup = round(runif(50, 5,11))
+g = unlist(sapply(1:n_groups, function(x) rep(x,npgroup[x])))
+N = length(g)
+x = sample(1:2,N,T)
+b = sample(letters[1:3],n_groups,T,prob=c(.3,.4,.3))
+b = b[g]
+res = MASS::mvrnorm(n=n_groups,
+mu=c(0,0),Sigma=matrix(c(2,0,0,.6),nrow=2))
+re0 = res[,1]
+re  = re0[g]
+rex = res[,2]
+re_x  = rex[g]
+lp = (-.5 + re) - (.4 + re_x)*scale(x)[,1] + 1.2*(b=="a")
+y_bin = rbinom(N, size = 1, prob = plogis(lp))
+y = lp + rnorm(N,0,1.3)
+df = data.frame(x = x, g=factor(g), b=b,y_bin)
+mnames = unique(randomNames::randomNames(n_groups*4,which.names="first"))
+monkeystatus = df |>
+transmute(
+status = ifelse(b=="a","subordinate",ifelse(b=="b","dominant","adolescent")),#cut(x,3,labels=letters[1:3]),
+difficulty = factor(x, labels=c("easy","difficult")),
+monkeyID = mnames[as.numeric(g)],
+probsolved = y_bin,
+probscore = round(scale(y)[,1]*10+50,1)
+) |> filter(!(monkeyID=="Richard" & difficulty=="easy"),
+!(monkeyID=="Nadheera" & difficulty=="difficult"))
+# library(lme4)
+m = glmer(probsolved ~ difficulty + status + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+summary(m)
+anova(
+glmer(probsolved ~ difficulty + (1+difficulty|monkeyID), monkeystatus, family=binomial),
+glmer(probsolved ~ difficulty + status + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+)
+anova(
+m1=glmer(probsolved ~ difficulty + (1+difficulty|monkeyID), monkeystatus, family=binomial),
+m2=glmer(probsolved ~ difficulty + status + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+)
+m = glmer(probsolved ~ difficulty + status + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+summary(m)
+m1=glmer(probsolved ~ difficulty + (1+difficulty|monkeyID), monkeystatus, family=binomial),
+m1=glmer(probsolved ~ difficulty + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+anova(m1,m)
+ss = 709233#round(runif(1,1e3,1e6))
+set.seed(ss)
+n_groups = 50
+# npgroup = round(runif(30,2,25))
+npgroup = round(runif(50, 5,11))
+g = unlist(sapply(1:n_groups, function(x) rep(x,npgroup[x])))
+N = length(g)
+x = sample(1:2,N,T)
+b = sample(letters[1:3],n_groups,T,prob=c(.3,.4,.3))
+b = b[g]
+res = MASS::mvrnorm(n=n_groups,
+mu=c(0,0),Sigma=matrix(c(2,0,0,.6),nrow=2))
+re0 = res[,1]
+re  = re0[g]
+rex = res[,2]
+re_x  = rex[g]
+lp = (-.5 + re) - (.4 + re_x)*scale(x)[,1] + 1.6*(b=="a")
+y_bin = rbinom(N, size = 1, prob = plogis(lp))
+y = lp + rnorm(N,0,1.3)
+df = data.frame(x = x, g=factor(g), b=b,y_bin)
+mnames = unique(randomNames::randomNames(n_groups*4,which.names="first"))
+monkeystatus = df |>
+transmute(
+status = ifelse(b=="a","subordinate",ifelse(b=="b","dominant","adolescent")),#cut(x,3,labels=letters[1:3]),
+difficulty = factor(x, labels=c("easy","difficult")),
+monkeyID = mnames[as.numeric(g)],
+probsolved = y_bin,
+probscore = round(scale(y)[,1]*10+50,1)
+) |> filter(!(monkeyID=="Richard" & difficulty=="easy"),
+!(monkeyID=="Nadheera" & difficulty=="difficult"))
+# library(lme4)
+m = glmer(probsolved ~ difficulty + status + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+summary(m)
+m1=glmer(probsolved ~ difficulty + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+anova(m1,m)
+ss = 709233#round(runif(1,1e3,1e6))
+set.seed(ss)
+n_groups = 50
+# npgroup = round(runif(30,2,25))
+npgroup = round(runif(50, 5,11))
+g = unlist(sapply(1:n_groups, function(x) rep(x,npgroup[x])))
+N = length(g)
+x = sample(1:2,N,T)
+b = sample(letters[1:3],n_groups,T,prob=c(.3,.4,.3))
+b = b[g]
+res = MASS::mvrnorm(n=n_groups,
+mu=c(0,0),Sigma=matrix(c(2,0,0,.6),nrow=2))
+re0 = res[,1]
+re  = re0[g]
+rex = res[,2]
+re_x  = rex[g]
+lp = (-.5 + re) - (.4 + re_x)*scale(x)[,1] + 1.4*(b=="a")
+y_bin = rbinom(N, size = 1, prob = plogis(lp))
+y = lp + rnorm(N,0,1.3)
+df = data.frame(x = x, g=factor(g), b=b,y_bin)
+mnames = unique(randomNames::randomNames(n_groups*4,which.names="first"))
+monkeystatus = df |>
+transmute(
+status = ifelse(b=="a","subordinate",ifelse(b=="b","dominant","adolescent")),#cut(x,3,labels=letters[1:3]),
+difficulty = factor(x, labels=c("easy","difficult")),
+monkeyID = mnames[as.numeric(g)],
+probsolved = y_bin,
+probscore = round(scale(y)[,1]*10+50,1)
+) |> filter(!(monkeyID=="Richard" & difficulty=="easy"),
+!(monkeyID=="Nadheera" & difficulty=="difficult"))
+# library(lme4)
+m = glmer(probsolved ~ difficulty + status + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+summary(m)
+m1=glmer(probsolved ~ difficulty + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+anova(m1,m)
+lmer(probscore ~ 1 + difficulty + status +
+(1 + difficulty | monkeyID),
+data=monkeystatus) |> summary()
+library(tidyverse)
+library(lme4)
+# TODO
+monkeystat <- monkeystatus
+head(monkeystat)
+monkeystat |>
+count(monkeyID) |> # count the monkeys!
+summary()
+monkeystat |>
+group_by(status) |> # group statuses
+summarise(
+# count the distinct monkeys
+nmonkey = n_distinct(monkeyID)
+)
+# which monkeys did what type of problems?
+monkeystat |> count(status, monkeyID, difficulty) |>
+ggplot(aes(x=difficulty,y=n, fill=status))+
+geom_col()+
+facet_wrap(~monkeyID)
+# a quick look at proportions of problems solved:
+ggplot(monkeystat, aes(x=difficulty, y=probsolved,
+col=status))+
+stat_summary(geom="pointrange",size=1)+
+facet_wrap(~status)
+mmod <- glmer(probsolved ~ difficulty + status +
+(1 + difficulty | monkeyID),
+data = monkeystat, family = binomial)
+summary(mmod)
+mmod0 <- glmer(probsolved ~ difficulty +
+(1 + difficulty | monkeyID),
+data = monkeystat, family = binomial)
+anova(mmod0, mmod)
+library(effects)
+effect(term=c("status","difficulty"), mod=mmod) |>
+as.data.frame() |>
+ggplot(aes(x=difficulty, y=fit))+
+geom_pointrange(aes(ymin=lower,ymax=upper, col=status),
+size=1, position=position_dodge(width=.3))
+effect(term=c("status","difficulty"), mod=mmod) |>
+as.data.frame() |>
+ggplot(aes(x=difficulty, y=fit))+
+geom_pointrange(aes(ymin=lower,ymax=upper, col=status),
+size=1, lwd=1,
+position=position_dodge(width=.3))
+dotplot.ranef.mer(ranef(mmod))
+exp(fixef(mmod))
+broom.mixed::tidy(mmod)
+broom.mixed::tidy(mmod) |>
+filter(effect=="fixed")
+broom.mixed::tidy(mmod) |>
+filter(effect=="fixed") |>
+select(term, estimate)
+broom.mixed::tidy(mmod) |>
+filter(effect=="fixed") |>
+transmute(
+term,
+est = round(estimate,2),
+OR = round(exp(estimate),2)
+)
+broom.mixed::tidy(mmod) |>
+filter(effect=="fixed") |>
+transmute(
+term,
+est = round(estimate,2),
+OR = round(exp(estimate),2),
+`OR interpretation` = c(
+"estimated odds of an adolescent monkey solving an easy problem",
+"odds of successful problem solving are more than halved (0.42 times the odds) when a given monkey moves from an easy to a difficult problem",
+"odds of success would be almost doubled (1.95 times the odds) if a monkey were to change from adolescent to dominant status",
+"odds of success would quadruple (4.3 times the odds) if a monkey were to change from adolescent to subordinate status"
+)
+) |> gt::gt()
+confint(fixed(mmod))
+confint(fixef(mmod))
+confint(mmod)
+confint(mmod)
+?profile
+?profile.merMod
+?confint.merMod
+confint(mmod, maxpts=8)
+pp <- profile(mmod)
+tpr <- profile(smod3)
+# Chunk 1: setup
+#| label: setup
+#| include: false
+source('assets/setup.R')
+library(xaringanExtra)
+library(tidyverse)
+library(patchwork)
+xaringanExtra::use_panelset()
+# Chunk 2: fig-se3
+#| echo: false
+#| label: fig-se3
+#| fig-cap: "The standard error is the standard deviation of the 'sampling distribution' - the distribution of sample statistics that we _could_ see. We use this to ask how likely we are to see our observed sample in a universe where the null hypothesis is true. This probability gives us reason to reject (or not) said null hypothesis."
+#| fig-height: 3.5
+set.seed(2394)
+samplemeans <- seq(-5,5,.1)
+g <- ggplot(data=tibble(samplemeans),aes(x=samplemeans))+
+#geom_histogram(alpha=.3)+
+stat_function(geom="line",fun=~dnorm(.x, mean=0,sd=1),lwd=1)
+ld <- layer_data(g) |> filter(x <= 1 & x >= -1)
+ld2 <- layer_data(g) |> filter(x <= 2 & x >= -2)
+ld3 <- layer_data(g) |> filter(x >= 2.5)
+g + geom_area(data=ld,aes(x=x,y=y),fill="grey30",alpha=.3) +
+geom_area(data=ld2,aes(x=x,y=y),fill="grey30",alpha=.1) +
+geom_area(data=ld3,aes(x=x,y=y),fill="red",alpha=.1) +
+geom_vline(xintercept=2.5,col="red")+
+annotate("text",x=3,y=.3,label="observed\nsample statistic",col="red",hjust=0,vjust=0)+
+geom_curve(aes(x=3, xend=2.5, y=.3, yend=.2), col="red", size=0.5,
+curvature = 0, arrow = arrow(length = unit(0.03, "npc")))+
+geom_vline(xintercept = 0, col="black",lty="dashed", lwd=.5) +
+annotate("text",
+x=-2, y=.3,
+label="Null Hypothesis", col="black",
+hjust=1)+
+geom_curve(aes(x=-2, xend=0, y=.3, yend=.3), col="black", size=0.5,
+curvature = 0, arrow = arrow(length = unit(0.03, "npc")))+
+geom_segment(x=0,xend=-1,y=.15,yend=.15) +
+annotate("text",x=-3.5, y=.16, label="Standard Error (SE)\n(standard deviation of\nsampling distribution)", col="grey30")+
+geom_curve(aes(x=-2.3, xend=-.5, y=.2, yend=.15), col="grey30", size=0.5, curvature = -0.3, arrow = arrow(length = unit(0.03, "npc")))+
+scale_y_continuous(NULL,breaks=NULL)+
+theme_minimal()+
+scale_x_continuous("sample means under the null hypothesis",breaks=NULL)
+# Chunk 3
+library(tidyverse)
+library(lme4)
+schoolmot <- read_csv("https://uoepsy.github.io/data/schoolmot.csv")
+smod3 <- lmer(grade ~ motiv * funding + (1 + motiv | schoolid),
+data = schoolmot)
+# Chunk 4
+smod3sat <- lmerTest::lmer(grade ~ motiv * funding +
+(1 + motiv | schoolid),
+data = schoolmot)
+summary(smod3sat)
+# Chunk 5
+smod3 <- lmer(grade ~ motiv * funding + (1 + motiv | schoolid),
+data = schoolmot)
+smod3_res <- lmer(grade ~ motiv + funding + (1 + motiv | schoolid),
+data = schoolmot)
+library(pbkrtest)
+SATmodcomp(largeModel = smod3, smallModel = smod3_res)
+# Chunk 6
+library(parameters)
+model_parameters(smod3, ci_method="kr")
+# Chunk 7
+smod3 <- lmer(grade ~ motiv * funding + (1 + motiv | schoolid),
+data = schoolmot, REML=TRUE)
+smod3_res <- lmer(grade ~ motiv + funding + (1 + motiv | schoolid),
+data = schoolmot, REML=TRUE)
+library(pbkrtest)
+KRmodcomp(largeModel = smod3, smallModel = smod3_res)
+# Chunk 8: fig-mlee
+#| label: fig-mlee
+#| fig-cap: "likelihood is the probability of observing the data, given some model"
+#| out-height: "200px"
+#| out-wight: "200px"
+#| echo: false
+knitr::include_graphics("images/mle_single.png")
+# Chunk 9
+smod3 <- lmer(grade ~ motiv * funding + (1 + motiv | schoolid),
+data = schoolmot, REML = FALSE)
+smod3_res <- lmer(grade ~ motiv + funding + (1 + motiv | schoolid),
+data = schoolmot, REML = FALSE)
+anova(smod3_res, smod3) # a likelihood ratio test!
+tpr <- profile(smod3)
+confint(tpr)
+confint(mmod, method="boot")
+confint(mmod, which="beta_")
+confint(mmod, parm="beta_")
+cbind(fixef(mmod),
+confint(mmod, parm="beta_",
+non.mono.tol=1e-10))
+tpr <- profile(mmod,devtol=1e-4)
+mci = confint(mmod, method="boot")
+mci
+confint(mmod, method="wald")
+confint(mmod, method="Wald")
+confint(mmod, method="Wald", parm="beta_")
+cbind(
+fixef(mmod), # the fixed effects
+confint(mmod, method="Wald", parm="beta_") # Wald CIs for fixed effects
+)
+cbind(
+fixef(mmod), # the fixed effects
+confint(mmod, method="Wald", parm="beta_") # Wald CIs for fixed effects
+) |>
+exp()
+file.edit("../../junk/R/uoepsy_cols.R")
+library(effects)
+effect(term=c("status","difficulty"), mod=mmod) |>
+as.data.frame() |>
+ggplot(aes(x=difficulty, y=fit))+
+geom_pointrange(aes(ymin=lower,ymax=upper, col=status),
+size=1, lwd=1,
+position=position_dodge(width=.3)) +
+labs(x = "problem difficulty", y = "predicted probability")
+ggplot(monkeystat, aes(x=difficulty, y=probsolved,
+col=status))+
+stat_summary(geom="pointrange",size=1, aes(group=monkeyID))
+# a quick look at proportions of problems solved:
+ggplot(monkeystat, aes(x=difficulty, y=probsolved,
+col=status))+
+stat_summary(geom="pointrange",size=1, aes(group=monkeyID))+
+facet_wrap(~status)
+#| out-width: "100%"
+# which monkeys did what type of problems?
+monkeystat |> count(status, monkeyID, difficulty) |>
+ggplot(aes(x=difficulty,y=n, fill=status))+
+geom_col()+
+facet_wrap(~monkeyID) +
+theme(legend.position = "bottom",
+axis.text.x = element_text(angle=60))
+#| out-width: "100%"
+# which monkeys did what type of problems?
+monkeystat |> count(status, monkeyID, difficulty) |>
+ggplot(aes(x=difficulty,y=n, fill=status))+
+geom_col()+
+facet_wrap(~monkeyID) +
+scale_x_discrete(labels=abbreviate()) +
+theme(legend.position = "bottom")
+?abbrev
+?abbreviate
+#| out-width: "100%"
+# which monkeys did what type of problems?
+monkeystat |> count(status, monkeyID, difficulty) |>
+ggplot(aes(x=difficulty,y=n, fill=status))+
+geom_col()+
+facet_wrap(~monkeyID) +
+scale_x_discrete(labels=abbreviate) +
+theme(legend.position = "bottom")
+#| out-width: "100%"
+# which monkeys did what type of problems?
+monkeystat |> count(status, monkeyID, difficulty) |>
+ggplot(aes(x=difficulty,y=n, fill=status))+
+geom_col()+
+facet_wrap(~monkeyID) +
+scale_x_discrete(NULL,labels=abbreviate) +
+theme(legend.position = "bottom")
+#| out-width: "100%"
+# which monkeys did what type of problems?
+monkeystat |> count(status, monkeyID, difficulty) |>
+ggplot(aes(x=difficulty,y=n, fill=status))+
+geom_col()+
+facet_wrap(~monkeyID) +
+scale_x_discrete(labels=abbreviate)
+mmod0 <- glmer(probsolved ~ difficulty +
+(1 + difficulty | monkeyID),
+data = mstat, family = binomial)
+# Chunk 1: setup
+#| label: setup
+#| include: false
+source('assets/setup.R')
+library(xaringanExtra)
+library(tidyverse)
+library(patchwork)
+xaringanExtra::use_panelset()
+# Chunk 2
+#| echo: false
+ss = 709233#round(runif(1,1e3,1e6))
+set.seed(ss)
+n_groups = 50
+# npgroup = round(runif(30,2,25))
+npgroup = round(runif(50, 5,11))
+g = unlist(sapply(1:n_groups, function(x) rep(x,npgroup[x])))
+N = length(g)
+x = sample(1:2,N,T)
+b = sample(letters[1:3],n_groups,T,prob=c(.3,.4,.3))
+b = b[g]
+res = MASS::mvrnorm(n=n_groups,
+mu=c(0,0),Sigma=matrix(c(2,0,0,.6),nrow=2))
+re0 = res[,1]
+re  = re0[g]
+rex = res[,2]
+re_x  = rex[g]
+lp = (-.5 + re) - (.4 + re_x)*scale(x)[,1] + 1.4*(b=="a")
+y_bin = rbinom(N, size = 1, prob = plogis(lp))
+y = lp + rnorm(N,0,1.3)
+df = data.frame(x = x, g=factor(g), b=b,y_bin)
+mnames = unique(randomNames::randomNames(n_groups*4,which.names="first"))
+monkeystatus = df |>
+transmute(
+status = ifelse(b=="a","subordinate",ifelse(b=="b","dominant","adolescent")),#cut(x,3,labels=letters[1:3]),
+difficulty = factor(x, labels=c("easy","difficult")),
+monkeyID = mnames[as.numeric(g)],
+solved = y_bin,
+score = round(scale(y)[,1]*10+50,1)
+) |> filter(!(monkeyID=="Richard" & difficulty=="easy"),
+!(monkeyID=="Nadheera" & difficulty=="difficult"))
+# library(lme4)
+# m = glmer(probsolved ~ difficulty + status + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+# summary(m)
+#
+# m1=glmer(probsolved ~ difficulty + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+# anova(m1,m)
+#
+# lmer(probscore ~ 1 + difficulty + status +
+#                (1 + difficulty | monkeyID),
+#       data=monkeystatus) |> summary()
+write_csv(monkeystatus |> select(-score),
+file="../../data/msmr_monkeystatus.csv")
+# Chunk 1: setup
+#| label: setup
+#| include: false
+source('assets/setup.R')
+library(xaringanExtra)
+library(tidyverse)
+library(patchwork)
+xaringanExtra::use_panelset()
+#| echo: false
+ss = 709233#round(runif(1,1e3,1e6))
+set.seed(ss)
+n_groups = 50
+# npgroup = round(runif(30,2,25))
+npgroup = round(runif(50, 5,11))
+g = unlist(sapply(1:n_groups, function(x) rep(x,npgroup[x])))
+N = length(g)
+x = sample(1:2,N,T)
+b = sample(letters[1:3],n_groups,T,prob=c(.3,.4,.3))
+b = b[g]
+res = MASS::mvrnorm(n=n_groups,
+mu=c(0,0),Sigma=matrix(c(2,0,0,.6),nrow=2))
+re0 = res[,1]
+re  = re0[g]
+rex = res[,2]
+re_x  = rex[g]
+lp = (-.5 + re) - (.4 + re_x)*scale(x)[,1] + 1.4*(b=="a")
+y_bin = rbinom(N, size = 1, prob = plogis(lp))
+y = lp + rnorm(N,0,1.3)
+df = data.frame(x = x, g=factor(g), b=b,y_bin)
+mnames = unique(randomNames::randomNames(n_groups*4,which.names="first"))
+monkeystatus = df |>
+transmute(
+status = ifelse(b=="a","subordinate",ifelse(b=="b","dominant","adolescent")),#cut(x,3,labels=letters[1:3]),
+difficulty = factor(x, labels=c("easy","difficult")),
+monkeyID = mnames[as.numeric(g)],
+solved = y_bin,
+score = round(scale(y)[,1]*10+50,1)
+) |> filter(!(monkeyID=="Richard" & difficulty=="easy"),
+!(monkeyID=="Nadheera" & difficulty=="difficult"))
+# library(lme4)
+# m = glmer(probsolved ~ difficulty + status + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+# summary(m)
+#
+# m1=glmer(probsolved ~ difficulty + (1+difficulty|monkeyID), monkeystatus, family=binomial)
+# anova(m1,m)
+#
+# lmer(probscore ~ 1 + difficulty + status +
+#                (1 + difficulty | monkeyID),
+#       data=monkeystatus) |> summary()
+write_csv(monkeystatus |> select(-score),
+file="../../data/msmr_monkeystatus.csv")

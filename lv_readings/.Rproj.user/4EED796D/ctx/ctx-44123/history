@@ -1,0 +1,512 @@
+)
+library(car)
+mod <- lm(y ~ x + x2, df)
+boot_mod <- Boot(mod)
+Confint(boot_mod)
+library(boot)
+rsq <- function(formula, data, indices){
+d <- data[indices,] # allows boot to select sample
+fit <- lm(formula, data=d)
+return(summary(fit)$r.square)
+}
+results <- boot(data = df, statistic = rsq,
+R = 1000, formula = y~x+x2)
+boot.ci(results, type="bca")
+emmeans(fit, pairwise ~ x2)
+emmeans(m, pairwise ~ Species)
+emmeans(m, pairwise ~ Species)$contrasts
+getemm <- function(formula, data, indices){
+d <- data[indices,] # allows boot to select sample
+fit <- lm(formula, data=d)
+return(emmeans(fit, pairwise ~ x2)$contrasts)
+}
+results <- boot(data = df, statistic = getemm,
+R = 1000, formula = y~x+x2)
+library(emmeans)
+getemm <- function(formula, data, indices){
+d <- data[indices,] # allows boot to select sample
+fit <- lm(formula, data=d)
+return(emmeans(fit, pairwise ~ x2)$contrasts)
+}
+results <- boot(data = df, statistic = getemm,
+R = 10, formula = y~x+x2)
+getemm <- function(model){
+t <- summary(emmeans(., pairwise ~ x2))$contrasts
+setNames(t$estimate, t$contrast)[1]
+}
+m = lm(y~x+x2,df)
+m.boot <- Boot(m, getemm())
+m.boot <- Boot(m, getemm(.))
+m.boot <- Boot(m, ~getemm(.))
+?Boot
+m.boot <- Boot(m, f=getemm)
+getemm <- function(model){
+t <- summary(emmeans(model, pairwise ~ x2))$contrasts
+setNames(t$estimate, t$contrast)[1]
+}
+m.boot <- Boot(m, f=getemm)
+m.boot <- Boot(m, f=getemm, R = 10)
+confint(m.boot)
+getemm(m)
+setNames(t$estimate, t$contrast)
+getemm <- function(model){
+t <- summary(emmeans(model, pairwise ~ x2))$contrasts
+setNames(t$estimate, t$contrast)
+}
+m.boot <- Boot(m, f=getemm, R = 10)
+confint(m.boot)
+?emmeans
+m = "
+i~g+m
+e~g+i
+m~g+e+g:e
+"
+simulateData(m)
+library(lavaan)
+m = "
+i~g+m
+e~g+i
+m~g+e+g:e
+"
+simulateData(m)
+df <- simulateData(m)
+sem(m,df)
+semPlot::semPaths(lavaanify(m))
+head(df)
+m = "
+i~g+m
+e~g+i
+m~g*e
+"
+df <- simulateData(m)
+sem(m,df)
+semPlot::semPaths(lavaanify(m))
+summary(sem(m,df))
+df <- simulateData(m)
+df$ge = df$e*df$g
+m = "
+i~g+m
+e~g+i
+m~g+e+ge
+"
+summary(sem(m,df))
+semPlot::semPaths(lavaanify(m))
+m = "
+i~2*g+2*m
+e~2*g+2*i
+m~2*g+2*e-2*ge
+"
+df <- simulateData(m)
+df$ge = df$e*df$g
+m = "
+i~g+m
+e~g+i
+m~g+e+ge
+"
+summary(sem(m,df))
+semPlot::semPaths(lavaanify(m))
+m = "
+i~2*g+2*m
+e~2*g+2*i
+m~2*g+2*e-2*ge
+"
+df <- simulateData(m)
+m = "
+i~2*g+2*m
+e~2*g+2*i
+m~2*g+2*e
+"
+df <- simulateData(m)
+df$ge = df$e*df$g
+m = "
+i~g+m
+e~g+i
+m~g+e+ge
+"
+summary(sem(m,df))
+m = "
+y ~ 1*x
+z ~ 1*y
+x ~ 1*z
+"
+df <- simulateData(m)
+m = "
+y ~ 1*x
+z ~ 1*y+1*x
+"
+df <- simulateData(m)
+df$ge = df$e*df$g
+x <- rnorm(100)
+moments::skewness(x)
+psych::describe(x)
+moments::kurtosis(x)
+psych::describe(x)
+moments::skewness(x)
+moments::kurtosis(x)
+?moments::kurtosis(x)
+?psych::describe(x)
+psych::describe(x,type=2)
+psych::describe(x,type=3)
+psych::describe(x,type=1)
+?moments::kurtosis(x)
+set.seed(1234)
+kurtosis(rnorm(1000))
+set.seed(1234)
+moments::kurtosis(rnorm(1000))
+moments::skewness(x)
+moments::kurtosis(x)
+psych::describe(x)
+moments::skewness(x)
+moments::kurtosis(x)
+psych::describe(x, type=2)
+psych::describe(x, type=1)
+x <- rnorm(100)
+psych::describe(x, type=1)
+moments::skewness(x)
+moments::kurtosis(x)
+moments::kurtosis(x)-3
+psych::describe(x)
+psych::describe(x, type=1)
+moments::skewness(x)
+x <- rnorm(100)
+psych::describe(x, type=1)
+moments::skewness(x)
+moments::kurtosis(x)-3
+x <- rnorm(100)
+psych::describe(x, type=1)
+x <- rnorm(100)
+library(psych)
+describe(x, type=1)
+library(moments)
+skewness(x)
+kurtosis(x)-3
+g = sample(0:1,500,T)
+m = rnorm(500)
+i = 1*g + 1*m
+e = 1*g + 1*i
+data.frame(g,m,i,e)
+df <- data.frame(g,m,i,e)
+library(lavaan)
+m = "
+i~m+g
+e~i+g
+m~g+g:e
+"
+sem(m,df)
+m = "
+i~m+g
+e~i+g
+m~g+g:e
+"
+sem(m,df)
+cor(df)
+summary(lm(m~g+i,df))
+summary(lm(m~g,df))
+library(tidyverse)
+df <- read_csv("C:/Users/jking34/Downloads/e2_to37_trial20bin.csv")
+head(df)
+df <- read_csv("C:/Users/jking34/Downloads/osfstorage-archive/to37_trial20bin.csv")
+head(df)
+#remove practice trials
+summary(data$TRIAL_LABEL)
+data <- read_csv("C:/Users/jking34/Downloads/osfstorage-archive/to37_trial20bin.csv")
+summary(data$TRIAL_LABEL)
+practice<-levels(data$TRIAL_LABEL)[c(1,2,13,24,35,46)]
+for (i in practice){
+data<-data[data$TRIAL_LABEL!=i,]
+}
+#remove unwanted columns (left eye is empty, was not tracked )
+names(data)
+data<-data[,-c(9:23)]
+#oh, and the unused ia labels
+data<-data[,-c(17:18)]
+#just critical trials
+data<-data[data$trial_type=="exp",]
+#This just fixes a problem with subject2 - disfluent and disfluent_caused were coded in reverse.
+#Additionally, in subjects 1 and 5, there was a typo - "fork" item should be in fluent_caused.
+#For all other subjects, the experiment file was fixed and the data is correct.
+summary(data[data$RECORDING_SESSION_LABEL=="sub_2",19])
+names(data)
+for (n in (1:nrow(data))){
+if (data[n,1]=="sub_2"){
+if (data[n,19]=="disfluent"){
+data[n,19]<-"disfluent_caused"
+} else if (data[n,19]=="disfluent_caused"){
+data[n,19]<-"disfluent"
+}
+} else if (data[n,1]=="sub_1" | data[n,1]=="sub_5"){
+if (data[n,23]=="fork"){
+data[n,19]<-"fluent_caused"
+}
+}
+}
+data <- read_csv("C:/Users/jking34/Downloads/osfstorage-archive/to37_trial20bin.csv")
+#remove practice trials
+summary(data$TRIAL_LABEL)
+practice<-levels(data$TRIAL_LABEL)[c(1,2,13,24,35,46)]
+for (i in practice){
+data<-data[data$TRIAL_LABEL!=i,]
+}
+#remove unwanted columns (left eye is empty, was not tracked )
+names(data)
+data<-data[,-c(9:23)]
+#oh, and the unused ia labels
+data<-data[,-c(17:18)]
+#just critical trials
+data<-data[data$trial_type=="exp",]
+#This just fixes a problem with subject2 - disfluent and disfluent_caused were coded in reverse.
+#Additionally, in subjects 1 and 5, there was a typo - "fork" item should be in fluent_caused.
+#For all other subjects, the experiment file was fixed and the data is correct.
+summary(data[data$RECORDING_SESSION_LABEL=="sub_2",19])
+names(data)
+for (n in (1:nrow(data))){
+if (data[n,1]=="sub_2"){
+if (data[n,19]=="disfluent"){
+data[n,19]<-"disfluent_caused"
+} else if (data[n,19]=="disfluent_caused"){
+data[n,19]<-"disfluent"
+}
+} else if (data[n,1]=="sub_1" | data[n,1]=="sub_5"){
+if (data[n,23]=="fork"){
+data[n,19]<-"fluent_caused"
+}
+}
+}
+summary(data[data$RECORDING_SESSION_LABEL=="sub_2",19])
+data[data$RECORDING_SESSION_LABEL=="sub_2",19]
+library(tidyverse)
+data <- read_csv("C:/Users/jking34/Downloads/osfstorage-archive/to37_trial20bin.csv")
+#remove practice trials
+summary(data$TRIAL_LABEL)
+practice<-levels(data$TRIAL_LABEL)[c(1,2,13,24,35,46)]
+for (i in practice){
+data<-data[data$TRIAL_LABEL!=i,]
+}
+#remove unwanted columns (left eye is empty, was not tracked )
+names(data)
+data<-data[,-c(9:23)]
+#oh, and the unused ia labels
+data<-data[,-c(17:18)]
+#just critical trials
+data<-data[data$trial_type=="exp",]
+head(data)
+data <- read_csv("C:/Users/jking34/Downloads/osfstorage-archive/to37_trial20bin.csv")
+#remove practice trials
+summary(data$TRIAL_LABEL)
+levels(data$TRIAL_LABEL)
+#remove practice trials
+summary(data$TRIAL_LABEL)
+data <- read.csv("C:/Users/jking34/Downloads/osfstorage-archive/to37_trial20bin.csv")
+#remove practice trials
+summary(data$TRIAL_LABEL)
+data <- read.csv("C:/Users/jking34/Downloads/osfstorage-archive/to37_trial20bin.csv",stringsAsFactors = T)
+#remove practice trials
+summary(data$TRIAL_LABEL)
+practice<-levels(data$TRIAL_LABEL)[c(1,2,13,24,35,46)]
+for (i in practice){
+data<-data[data$TRIAL_LABEL!=i,]
+}
+#remove unwanted columns (left eye is empty, was not tracked )
+names(data)
+data<-data[,-c(9:23)]
+#oh, and the unused ia labels
+data<-data[,-c(17:18)]
+#just critical trials
+data<-data[data$trial_type=="exp",]
+#This just fixes a problem with subject2 - disfluent and disfluent_caused were coded in reverse.
+#Additionally, in subjects 1 and 5, there was a typo - "fork" item should be in fluent_caused.
+#For all other subjects, the experiment file was fixed and the data is correct.
+summary(data[data$RECORDING_SESSION_LABEL=="sub_2",19])
+names(data)
+for (n in (1:nrow(data))){
+if (data[n,1]=="sub_2"){
+if (data[n,19]=="disfluent"){
+data[n,19]<-"disfluent_caused"
+} else if (data[n,19]=="disfluent_caused"){
+data[n,19]<-"disfluent"
+}
+} else if (data[n,1]=="sub_1" | data[n,1]=="sub_5"){
+if (data[n,23]=="fork"){
+data[n,19]<-"fluent_caused"
+}
+}
+}
+names(data)
+for (n in (1:nrow(data))){
+if (data[n,"ref_pos"]=="L"){
+x=data[n,"RIGHT_1_P"]
+data[n,28]=x
+} else {
+y=data[n,"RIGHT_2_P"]
+data[n,28]=y
+}
+}
+summary(data[,28])
+colnames(data)[28]<-"ref_fix"
+#Make variable for fixations to distractor
+for (n in (1:nrow(data))){
+if (data[n,"ref_pos"]=="L"){
+x=data[n,"RIGHT_2_P"]
+data[n,29]=x
+} else {
+y=data[n,"RIGHT_1_P"]
+data[n,29]=y
+}
+}
+rm(n,x,y)
+summary(data[,29])
+colnames(data)[29]<-"dis_fix"
+data$otherfix<-data$RIGHT_0_P
+#make variable for object clicked
+summary(data$click_pos)
+summary(data$ref_pos)
+data$clicked<-factor(ifelse(data$ref_pos==data$click_pos, "referent","distractor"))
+summary(data$clicked)
+#remove trials for which subjects did not click either object.
+data<-data[-which(is.na(data$clicked)),]
+#split data by believers/non believers
+data$subject<-data$RECORDING_SESSION_LABEL
+summary(data$subject)
+#subset of non-believers
+data2<-data[data$subject=="sub_4" | data$subject=="sub_8" | data$subject=="sub_9" | data$subject=="sub_16" | data$subject=="sub_17" |  data$subject=="sub_18" | data$subject=="sub_24" | data$subject=="sub_25" | data$subject=="sub_27" | data$subject=="sub_32" | data$subject=="sub_33" | data$subject=="sub_34" | data$subject=="sub_37", ]
+data2$subject<-factor(data2$subject)
+#subset of believers
+data<-data[data$subject!="sub_4" & data$subject!="sub_8" & data$subject!="sub_9" & data$subject!="sub_16" & data$subject!="sub_17" & data$subject!="sub_18" & data$subject!="sub_24" & data$subject!="sub_25" & data$subject!="sub_27" & data$subject!="sub_32" & data$subject!="sub_33" & data$subject!="sub_34" & data$subject!="sub_37", ]
+data$subject<-factor(data$subject)
+#check that number of believers.
+length(levels(data$subject))
+#cut to 2000ms post referent onset
+#for 20ms bins, we want upto 100 bins.
+data<-data[data$CURRENT_BIN<101,]
+#create time variable (just bin * 20)
+data$time<-data$CURRENT_BIN*20
+data2$time<-data2$CURRENT_BIN*20
+#create belief variable
+data$belief<-"Y"
+data2$belief<-"N"
+#merge believers and non-believers
+fdata<-rbind(data,data2)
+fdata$belief<-factor(fdata$belief)
+summary(fdata)
+names(fdata)
+#remove unwanted columns, just to tidy up a bit.
+fdata<-fdata[,-c(1,3,4,12:16)]
+#drop empty levels in condition variable
+fdata$condition<-factor(fdata$condition)
+#calculate the log odds (empirical logit) of proportion of fixations to each object
+fdata$elog_r<-log(fdata$ref_fix + .5/ (1 - fdata$ref_fix + .5))
+fdata$elog_d<-log(fdata$dis_fix + .5/ (1 - fdata$dis_fix + .5))
+# we want to look at the divergence between the fixations to referent and fixations to distractor.
+#so we want to take the (elogit(fixation to ref)-elogit(fixation to dis)).
+fdata$elog<-log(fdata$ref_fix + .5/ (1 - fdata$ref_fix + .5))-log(fdata$dis_fix + .5/ (1 - fdata$dis_fix + .5))
+#tidy up R environment
+rm(data,data2,i,practice)
+#create variables for delivery and ditractions.
+fdata$delivery<-factor(ifelse(fdata$condition=="fluent" | fdata$condition=="fluent_caused", "fluent","disfluent"))
+fdata$distraction<-factor(ifelse(fdata$condition=="disfluent" | fdata$condition=="fluent", "absent","present"))
+contrasts(fdata$delivery)[,1]<-c(1,0)
+colnames(contrasts(fdata$delivery))<-"disfluent"
+contrasts(fdata$delivery)
+contrasts(fdata$distraction)
+#write data to new file.
+write.csv(fdata,"C:/Users/jking34/Downloads/osfstorage-archive/data_tidy.csv")
+data <- read.csv("C:/Users/jking34/Downloads/osfstorage-archive/data_tidy.csv",stringsAsFactors = T)
+head(data)
+summary(data)
+hist(data$RIGHT_0_P)
+hist(data$RIGHT_1_P)
+data <- read.csv("C:/Users/jking34/Downloads/osfstorage-archive/data_tidy.csv",stringsAsFactors = T)
+head(data)
+data[,c(2:5)]
+head(data[,c(2:6)])
+head(data[,c(2:7)])
+head(data)
+names(data)
+head(data[,c(2:6,10:17,21:26)])
+data[,c(2:6,10:17,21:28)]
+names(data)
+data[,c(2:6,10:17,21:26,31:12)]
+data[,c(2:6,10:17,21:26,31:22)]
+data[,c(2:6,10:17,21:26,31:32)]
+data[,c(2:6,10:17,21:26,31:32)] %>%
+mutate(
+condition = interaction(delivery,distraction)
+)
+df <- data[,c(2:6,10:17,21:26,31:32)] %>%
+mutate(
+condition = interaction(delivery,distraction)
+) %>% select(-delivery,-distraction)
+head(df)
+names(df)
+df[,c(18,1,3,4,5,2,19,7,8,9,10,17,12:16)]
+df <- df[,c(18,1,3,4,5,2,19,7,8,9,10,17,12:16)]
+write_csv(df, "C:/Users/jking34/Downloads/osfstorage-archive/dff.csv")
+df <- read_csv("C:/Users/jking34/Downloads/osfstorage-archive/dff.csv")
+df <- read_csv("C:/Users/jking34/Downloads/osfstorage-archive/dff.csv") |>
+janitor::clean_names()
+df
+pivot_longer(df,ref_fix:otherfix)
+pivot_longer(df,ref_fix:otherfix) |>
+ggplot(_, aes(x=time,y=value))+
+geom_point()
+pivot_longer(df,ref_fix:otherfix) |>
+ggplot(aes(x=time,y=value))+
+geom_point()
+pivot_longer(df,ref_fix:otherfix) |>
+ggplot(aes(x=time,y=value))+
+stat_summary(geom="pointrange")
+pivot_longer(df,ref_fix:otherfix) |>
+ggplot(aes(x=time,y=value,col=name))+
+stat_summary(geom="pointrange")
+df <- read_csv("C:/Users/jking34/Downloads/osfstorage-archive/dff.csv") |>
+janitor::clean_names() |>
+filter(time <= 1000)
+# here's a quick plot
+pivot_longer(df,ref_fix:otherfix) |>
+ggplot(aes(x=time,y=value,col=name))+
+stat_summary(geom="pointrange")
+# here's a quick plot
+pivot_longer(df,ref_fix:otherfix) |>
+ggplot(aes(x=time,y=value,col=name))+
+stat_summary(geom="pointrange") +
+facet_wrap(~condition)
+library(brms)
+install.packages("brms")
+library(brms)
+dflong <- pivot_longer(df,ref_fix:otherfix)
+hist(dflong$value)
+model_zero_poisson <- brm(
+bf(value ~ 1),
+data = df,
+family = zero_inflated_poisson(),
+cores = 4, refresh = 0
+)
+model_zero_poisson <- brm(
+bf(value ~ 1),
+data = dflong,
+family = zero_inflated_poisson(),
+cores = 4, refresh = 0
+)
+model_beta <- brm(
+bf(value ~ 1),
+data = dflong,
+family = beta(),
+cores = 4, refresh = 0
+)
+model_beta <- brm(
+bf(value ~ 1),
+data = dflong,
+family = Beta(),
+cores = 4, refresh = 0
+)
+dflong$value = ifelse(dflong$value==0,0.001,
+ifelse(dflong$value==1,0.999))
+dflong$value = ifelse(dflong$value==0,0.001,
+ifelse(dflong$value==1,0.999, dflong$value))
+model_beta <- brm(
+bf(value ~ 1),
+data = dflong,
+family = Beta(),
+cores = 4, refresh = 0
+)
+gc()

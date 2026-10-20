@@ -1,0 +1,43 @@
+project:
+  type: website
+  render: 
+    - "*.qmd"
+    - "!working/*"
+    - "!working/archive/*"    
+  output-dir: ./wipdocs/
+
+website:  
+  title: "Latent Variable Modelling"
+  sidebar:
+    style: "floating"
+    search: true
+    collapse-level: 1
+    contents:
+      - 01_dimension_reduction.qmd
+      - 02_pca.qmd
+      - 03_efa.qmd
+      - 04_cfa.qmd
+      - 05_reliability.qmd
+      - 06_intropath.qmd
+      - 07_mediation.qmd
+      - 08_sem.qmd
+      - 00_datawrangle.qmd
+      - section: "Additional Docs"
+        contents:
+          - z_eigen.qmd
+
+format:
+  html:
+    toc: true
+    toc_float: true
+    link-citations: true
+    theme: 
+      - cosmo
+      - assets/style-labs.scss
+    include-in-header: 
+      - "assets/toggling.html"
+      - text: |
+          <link rel="stylesheet" href="https://uoepsy.github.io/assets/css/ccfooter.css" />
+    number-sections: false
+
+

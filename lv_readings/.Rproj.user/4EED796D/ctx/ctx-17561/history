@@ -1,0 +1,512 @@
+colMeans(t(res))
+apply(t(res),2,sd)
+df = tibble(
+c=sample(1:10,500,T),
+#c=sample(0:2,500,T,prob=c(.5,.4,.1)),
+x=.2*c + rnorm(500),
+y=.3*c + 1*x + .4*c*x + rnorm(500)
+) #|> mutate(c=factor(c))
+c(
+adj = coef(lm(y~c+x,df))['x'],
+#c1 = coef(lm(y~c*x,df,contrasts=list(c="contr.sum")))['x'],
+c1 = coef(lm(y~scale(c)*x,df))['x'],
+gc = marginaleffects::avg_slopes(lm(y~x*c,df),variables="x")$estimate
+)
+df = tibble(
+c=sample(1:10,500,T),
+#c=sample(0:2,500,T,prob=c(.5,.4,.1)),
+x=.2*c + rnorm(500),
+y=.3*c + 1*x + .4*c*x + rnorm(500)
+) #|> mutate(c=factor(c))
+c(
+adj = coef(lm(y~c+x,df))['x'],
+#c1 = coef(lm(y~c*x,df,contrasts=list(c="contr.sum")))['x'],
+c1 = coef(lm(y~scale(c)*x,df))['x'],
+gc = marginaleffects::avg_slopes(lm(y~x*c,df),variables="x")$estimate
+)
+marginaleffects::avg_slopes(lm(y~x*c,df),variables="x")$estimate
+coef(lm(y~scale(c)*x,df))['x']
+res <- MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) %>% lm(y~x,.) %>% broom::tidy() %>% mutate(across(estimate:statistic,~round(.,2)))
+MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) %>%
+lm(y~x+I(x^2),.) %>%
+sjPlot::plot_model(type="pred",show.data=TRUE) -> p
+MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) %>%
+lm(y~x+I(x^2)+I(x^3),.) %>%
+sjPlot::plot_model(type="pred",show.data=TRUE) -> p1
+p0$x + labs(title="",subtitle="y ~ x + e") +
+p$x + labs(title="",subtitle="y ~ x + x^2 + e") +
+p1$x + labs(title="",subtitle="y ~ x + x^2 + x^3 + e") & theme_bw(base_size=12)
+MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) %>%
+lm(y~x+I(x^2),.) %>%
+sjPlot::plot_model(type="pred",show.data=TRUE) -> p
+p
+dd = MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20)
+lm(y~x,dd)
+dd$poly1=poly(dd$x,2,raw=T)[,1]
+dd$poly2=poly(dd$x,2,raw=T)[,2]
+m1 = lm(y~poly1,dd)
+m2 = lm(y~poly1+poly2,dd)
+coef(m1)
+coef(m2)
+poly(1:10,raw=T)
+poly(1:10,2,raw=T)
+poly(0:10,2,raw=T)
+dd = MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) |>
+mutate(x-20)
+dd$poly1=poly(dd$x,2,raw=T)[,1]
+dd$poly2=poly(dd$x,2,raw=T)[,2]
+m1 = lm(y~poly1,dd)
+m2 = lm(y~poly1+poly2,dd)
+coef(m1)
+coef(m2)
+ggplot(dd,aes(x=x,y=y))+
+geom_point()
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])
+dd = MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) |>
+mutate(x-20)
+dd$poly1=poly(dd$x,2,raw=T)[,1]
+dd$poly2=poly(dd$x,2,raw=T)[,2]
+m1 = lm(y~poly1,dd)
+m2 = lm(y~poly1+poly2,dd)
+coef(m1)
+coef(m2)
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])+
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])+
+geom_line(aes(y=predict(m2)))
+dd = MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) |>
+mutate(x=x-20)
+dd$poly1=poly(dd$x,2,raw=T)[,1]
+dd$poly2=poly(dd$x,2,raw=T)[,2]
+m1 = lm(y~poly1,dd)
+m2 = lm(y~poly1+poly2,dd)
+coef(m1)
+coef(m2)
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])+
+geom_line(aes(y=predict(m2)))
+dd = MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) |>
+mutate(x2=x-19)
+dd$poly1=poly(dd$x2,2,raw=T)[,1]
+dd$poly2=poly(dd$x2,2,raw=T)[,2]
+m1 = lm(y~poly1,dd)
+m2 = lm(y~poly1+poly2,dd)
+coef(m1)
+coef(m2)
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])+
+geom_line(aes(y=predict(m2)))
+dd = MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) |>
+mutate(x2=x-10)
+dd$poly1=poly(dd$x2,2,raw=T)[,1]
+dd$poly2=poly(dd$x2,2,raw=T)[,2]
+m1 = lm(y~poly1,dd)
+m2 = lm(y~poly1+poly2,dd)
+coef(m1)
+coef(m2)
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])+
+geom_line(aes(y=predict(m2)))
+dd = MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) |>
+mutate(x=x-10)
+dd$poly1=poly(dd$x,2,raw=T)[,1]
+dd$poly2=poly(dd$x,2,raw=T)[,2]
+m1 = lm(y~poly1,dd)
+m2 = lm(y~poly1+poly2,dd)
+coef(m1)
+coef(m2)
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])+
+geom_line(aes(y=predict(m2)))
+dd = MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) |>
+mutate(x=x-10)
+dd$poly1=poly(dd$x,2,raw=T)[,1]
+dd$poly2=poly(dd$x,2,raw=T)[,2]
+m1 = lm(y~poly1,dd)
+m2 = lm(y~poly1+poly2,dd)
+coef(m1)
+coef(m2)
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])+
+geom_line(aes(y=predict(m2)))
+dd = MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) |>
+mutate(x=x-20)
+dd$poly1=poly(dd$x,2,raw=T)[,1]
+dd$poly2=poly(dd$x,2,raw=T)[,2]
+m1 = lm(y~poly1,dd)
+m2 = lm(y~poly1+poly2,dd)
+coef(m1)
+coef(m2)
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])+
+geom_line(aes(y=predict(m2)))
+m2 = lm(y~scale(poly1)+scale(poly2),dd)
+coef(m1)
+coef(m2)
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])+
+geom_line(aes(y=predict(m2)))
+dd = MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) |>
+mutate(x=x-20)
+dd$poly1=poly(dd$x,2,raw=T)[,1]
+dd$poly2=poly(dd$x,2,raw=T)[,2]
+m1 = lm(y~poly1,dd)
+m2 = lm(y~scale(poly1,scale=F)+scale(poly2,scale=F),dd)
+coef(m1)
+coef(m2)
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])+
+geom_line(aes(y=predict(m2)))
+dd = MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) |>
+mutate(x=x-100)
+dd$poly1=poly(dd$x,2,raw=T)[,1]
+dd$poly2=poly(dd$x,2,raw=T)[,2]
+m1 = lm(y~poly1,dd)
+m2 = lm(y~poly1+poly2,dd)
+coef(m1)
+coef(m2)
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])+
+geom_line(aes(y=predict(m2)))
+dd = MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) |>
+mutate(x=x-20)
+dd$poly1=poly(dd$x,2,raw=T)[,1]
+dd$poly2=poly(dd$x,2,raw=T)[,2]
+m1 = lm(y~poly1,dd)
+m2 = lm(y~poly1+poly2,dd)
+coef(m1)
+coef(m2)
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])+
+geom_line(aes(y=predict(m2)))
+dd = MASS::mcycle %>%
+rename(y=accel,x=times) %>% filter(x>20) |>
+mutate(x=x-20)
+dd$poly1=poly(dd$x,2,raw=F)[,1]
+dd$poly2=poly(dd$x,2,raw=F)[,2]
+m1 = lm(y~poly1,dd)
+m2 = lm(y~poly1+poly2,dd)
+coef(m1)
+coef(m2)
+ggplot(dd,aes(x=x,y=y))+
+geom_point()+
+geom_abline(intercept=coef(m2)[1],slope=coef(m2)[2])+
+geom_line(aes(y=predict(m2)))
+source("~/.active-rstudio-document", echo=TRUE)
+coef(m2)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+)
+cbind(1,df)
+model.matrix(rnorm(150)~C1*C2,df)
+names(model.matrix(rnorm(150)~C1*C2,df))
+colnames(model.matrix(rnorm(150)~C1*C2,df))
+model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,-2,-1,-1)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,-2,-1,-1),
+y = lp + rnorm(150)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+geom_point()
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,-1,2,-2,1,-1),
+y = lp + rnorm(150)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+geom_point()
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,-1,2,0,1,-1),
+y = lp + rnorm(150)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+geom_point()
+ggplot(df,aes(x=C1,y=lp,col=C2))+geom_point(size=4,alpha=.4)
+source("~/.active-rstudio-document", echo=TRUE)
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2))
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,-1,2,0,2,-1),
+y = lp + rnorm(150)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,0,-3,-4),
+y = lp + rnorm(150)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(150)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+# unbalanced
+df = tibble(
+C1 = sample(letters[1:3],150,T,prob=c(.4,.4,.2))
+C2 = sample(letters[4:5],150,T),
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+# unbalanced
+df = tibble(
+C1 = sample(letters[1:3],150,T,prob=c(.4,.4,.2)),
+C2 = sample(letters[4:5],150,T),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(150)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(150)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(150)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+# unbalanced
+df = tibble(
+C1 = sample(letters[1:3],150,T,prob=c(.4,.4,.2)),
+C2 = sample(letters[4:5],150,T),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(150)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+mt = lm(y~C1*C2,df, contrasts=list(C1="contr.sum",C2="contr.sum"))
+ms = lm(y~C1*C2,df, contrasts=list(C1="contr.sum",C2="contr.sum"))
+mt = lm(y~C1*C2,df)
+ms = lm(y~C1*C2,df, contrasts=list(C1="contr.sum",C2="contr.sum"))
+anova(mt)
+anova(ms)
+mt = lm(y~C1*C2,udf)
+ms = lm(y~C1*C2,udf, contrasts=list(C1="contr.sum",C2="contr.sum"))
+anova(mt)
+anova(ms)
+mt = lm(y~C1*C2,udf)
+library(tidyverse)
+library(marginaleffects)
+# cat cat interactions
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(150)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+# unbalanced
+udf = tibble(
+C1 = sample(letters[1:3],150,T,prob=c(.4,.4,.2)),
+C2 = sample(letters[4:5],150,T),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(150)
+)
+ggplot(udf,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+mt = lm(y~C1*C2,udf)
+ms = lm(y~C1*C2,udf, contrasts=list(C1="contr.sum",C2="contr.sum"))
+anova(mt)
+anova(ms)
+mt = lm(y~C1*C2,df)
+ms = lm(y~C1*C2,df, contrasts=list(C1="contr.sum",C2="contr.sum"))
+anova(mt)
+anova(ms)
+car::Anova(mt, type=3)
+car::Anova(mt, type=1)
+anova(ms)
+car::Anova(ms, type=3)
+anova(mt)
+car::Anova(mt, type=3)
+# type 1 is different when sum contrasts
+anova(mt)
+car::Anova(mt, type=3)
+marginaleffects::avg_comparisons(mt, variables=c("C2"))
+anova(ms)
+car::Anova(ms, type=3)
+marginaleffects::avg_comparisons(mt, variables=c("C2"))
+marginaleffects::avg_comparisons(mt, variables=c("C2"))
+marginaleffects::avg_comparisons(ms, variables=c("C2"))
+library(tidyverse)
+library(marginaleffects)
+# cat cat interactions
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=500),
+C2 = rep(letters[4:5],750),
+lp = model.matrix(rnorm(1500)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(1500)
+)
+library(tidyverse)
+library(marginaleffects)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=500),
+C2 = rep(letters[4:5],750),
+lp = model.matrix(rnorm(1500)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(1500)
+)
+rep(letters[1:3],e=500)
+rep(letters[4:5],750)
+rep(letters[1:3],e=500)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=500),
+C2 = rep(letters[4:5],750),
+#lp = model.matrix(rnorm(1500)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+#y = lp + rnorm(1500)
+)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=500),
+C2 = rep(letters[4:5],750),
+lp = model.matrix(rnorm(1500)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+#y = lp + rnorm(1500)
+)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=500),
+C2 = rep(letters[4:5],750),
+lp = model.matrix(rnorm(1500)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(1500)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+library(tidyverse)
+library(marginaleffects)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=500),
+C2 = rep(letters[4:5],750),
+lp = model.matrix(rnorm(1500)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(1500)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+# unbalanced
+udf = tibble(
+C1 = sample(letters[1:3],1500,T,prob=c(.4,.4,.2)),
+C2 = sample(letters[4:5],1500,T),
+lp = model.matrix(rnorm(1500)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(1500)
+)
+ggplot(udf,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+mt = lm(y~C1*C2,df)
+ms = lm(y~C1*C2,df, contrasts=list(C1="contr.sum",C2="contr.sum"))
+# type 1 is different when sum contrasts
+anova(mt)
+car::Anova(mt, type=3)
+# type 1 v type 3 are different when treatment contrasts
+anova(mt)
+car::Anova(mt, type=3)
+# the same when sum contrasts
+anova(ms)
+car::Anova(ms, type=3)
+marginaleffects::avg_comparisons(ms, variables=c("C2"))
+library(tidyverse)
+library(marginaleffects)
+# cat cat interactions
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(150)
+)
+library(tidyverse)
+library(marginaleffects)
+# cat cat interactions
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(150)
+)
+library(tidyverse)
+library(marginaleffects)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(150)
+)
+ggplot(df,aes(x=C1,y=lp,col=C2))+
+stat_summary(geom="point",position=position_dodge(width=.2),size=4)
+# balanced
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(150)
+)
+df = tibble(
+C1 = rep(letters[1:3],e=50),
+C2 = rep(letters[4:5],75),
+lp = model.matrix(rnorm(150)~C1*C2,df)%*%c(0,1,2,0,-2,-4),
+y = lp + rnorm(150)
+)

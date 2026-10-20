@@ -1,0 +1,7 @@
+"0","#| label: setup"
+"0","#| include: false"
+"0","source('assets/setup.R')"
+"0","library(xaringanExtra)"
+"0","library(tidyverse)"
+"0","library(patchwork)"
+"0","xaringanExtra::use_panelset()"

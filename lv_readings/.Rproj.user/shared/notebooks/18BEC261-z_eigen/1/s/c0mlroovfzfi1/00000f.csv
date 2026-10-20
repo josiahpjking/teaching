@@ -1,0 +1,17 @@
+"0","# lets create a correlation matrix, as f f'"
+"0","f <- seq(.9,.4,-.1)"
+"0","R <- f %*% t(f)"
+"0","#give rownames and colnames"
+"0","rownames(R)<-colnames(R)<-paste0(""V"",seq(1:6))"
+"0","#constrain diagonals to equal 1"
+"0","diag(R)<-1"
+"0","# here's our correlation matrix!"
+"0","R"
+"1","     V1   V2   V3   V4   V5   V6
+V1 1.00 0.72 0.63 0.54 0.45 0.36
+V2 0.72 1.00 0.56 0.48 0.40 0.32
+V3 0.63 0.56 1.00 0.42 0.35 0.28
+V4 0.54 0.48 0.42 1.00 0.30 0.24
+V5 0.45 0.40 0.35 0.30 1.00 0.20
+V6 0.36 0.32 0.28 0.24 0.20 1.00
+"
