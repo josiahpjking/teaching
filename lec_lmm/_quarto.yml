@@ -1,10 +1,10 @@
 project:
   render: 
     - "*.qmd"
-    - "!wip/*"
+    - "!working/*"
   output-dir: ./wipdocs/
 
-subtitle: "Data Analysis for Psychology in R 3"
+subtitle: "MSMR"
 author: "Josiah King - josiah.king@ed.ac.uk "
 institute:
   - "Psychology, PPLS"
@@ -37,7 +37,7 @@ filters:
   - line-highlight
 highlight-style: breeze
 title-slide-attributes:
-  data-background-color: "#88B04B"
+  data-background-color: "#a41ae4"
 execute:
   warning: false
   echo: true

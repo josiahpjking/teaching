@@ -1,3 +1,17 @@
+/*-- scss:defaults --*/
+
+// theme
+$primary-theme: #a41ae4 !default;
+$primary-theme-light: #f5e8fc !default; 
+$primary-theme-dark: #72129f !default; 
+$primary-theme-compl: #347c2c !default;
+$primary-theme-link: #0000ee !default;
+$primary-theme-warn: #ff9705 !default;
+$primary-theme-warn2: #fdeaea !default;
+$primary-theme-refresh: #4441af !default;
+
+$font-family-sans: 'Inter Sans', sans-serif !default;
+
 $colors: (
   "white": #FFFFFF,
   "black": #222222,
@@ -25,14 +39,14 @@ $link-color: theme-color("blue");
 
 // code font
 $font-family-monospace: 'Source Code Pro', monospace !default;
+// code background: ;
+$code-block-bg: #f5f7fa; 
 
 // headings
 $presentation-heading-font: "Sanchez", serif;
 $presentation-heading-font-weight: 500;
-$presentation-heading-color: theme-color("green");
+$presentation-heading-color: $primary-theme;
 $presentation-h2-font-size: 1.5em;
-
-
 
 /*-- scss:rules --*/
 
@@ -63,17 +77,17 @@ h2{
   }
 }
 
-// Add DAPR3-coloured callout box
-.dapr3callout {
+// Add MSMR-coloured callout box
+.msmrcallout {
   margin: .5em .5em;
-  border: 2px solid #88B04B;
-  border-left: 10px solid #88B04B; 
+  border: 2px solid $primary-theme;
+  border-left: 10px solid $primary-theme; 
   border-radius: 10px;
   padding-top: 0px;
   padding-left: 20px;
   padding-right: 20px;
   color: black;
-  background-color: #F2F7EC;
+  background-color: $primary-theme-light;
   border-bottom-right-radius: 10px;
 }
 

@@ -54,7 +54,7 @@ knitr::opts_chunk$set(
   tidy.opts=list(width.cutoff=70, arrow=TRUE, indent=2, args.newline=TRUE)
 )
 knitr::knit_hooks$set(crop = knitr::hook_pdfcrop)
-color_base <- '#458c3c'
+color_base <- '#72129f'
 color_text <- '#000000'
 color_bg <- '#ffffff'
 theme_set(theme_quarto())
