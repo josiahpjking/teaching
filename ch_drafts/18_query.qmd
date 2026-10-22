@@ -1,0 +1,49 @@
+---
+title: "Hitchhiker's guide to querying statistical models"
+editor_options: 
+  chunk_output_type: console
+---
+
+
+<!-- > We demand rigidly defined areas of doubt and uncertainty -->
+<!-- > I'd far rather be happy than right any day -->
+
+```{r}
+#| include: false
+library(tidyverse)
+library(gt)
+library(patchwork)
+library(modelsummary)
+```
+
+# link to building. specifying RQ
+
+chimp.
+unit quantity
+predict(x=x+1) - predict(x=x)
+our question, conveniently, corresponded to the coefficient in model y~z+x
+
+what if theory about dgp is more complex:
+y~z*x
+predict(x=x+1)-predict(x=x)
+in this case, with a little work, we can:
+y~scale(z)*x
+
+
+glm(y~x)
+
+
+
+# Part 2 querying your model
+
+- the aim here is to estimate the unit specific quantity defined in our research Q.  
+- sometimes that will correspond to a coefficient
+- but be careful not to simply define RQ relative to a model coefficient. it creates circularity we need to we need to be able to know that the quantity is actually a theoretically useful or interesting one.  
+
+
+
+
+
+
+
+

@@ -1,0 +1,46 @@
+[
+  {
+    "objectID": "18_query.html",
+    "href": "18_query.html",
+    "title": "Hitchhiker’s guide to querying statistical models",
+    "section": "",
+    "text": "link to building. specifying RQ\nchimp. unit quantity predict(x=x+1) - predict(x=x) our question, conveniently, corresponded to the coefficient in model y~z+x\nwhat if theory about dgp is more complex: y~zx predict(x=x+1)-predict(x=x) in this case, with a little work, we can: y~scale(z)x\nglm(y~x)\n\n\nPart 2 querying your model\n\nthe aim here is to estimate the unit specific quantity defined in our research Q.\n\nsometimes that will correspond to a coefficient\nbut be careful not to simply define RQ relative to a model coefficient. it creates circularity we need to we need to be able to know that the quantity is actually a theoretically useful or interesting one."
+  },
+  {
+    "objectID": "17_build.html",
+    "href": "17_build.html",
+    "title": "Hitchhiker’s guide to building statistical models",
+    "section": "",
+    "text": "Over the past 10 weeks, we have done a lot of work learning about the machinery of statistical models. But learning how different tools work is not the same as learning how to use them to build something.\nOne of the biggest challenges in doing scientific research is to thinking very carefully, deliberately, and clearly about all parts of the process. It is all too easy to go through the motions and do what looks like science, but only ever have a research question that is ill-defined and ambiguous. No amount of fancy statistics can provide a clear answer to an under-specified question.\n\n\n\n\n\n\n\n\n\n\n\nFigure 1: I may know how to use a saw, a drill, a hammer, etc., but I cannot build a house!",
+    "crumbs": [
+      "Hitchhiker's guide to building statistical models"
+    ]
+  },
+  {
+    "objectID": "17_build.html#how-to-specify-clear-research-questions",
+    "href": "17_build.html#how-to-specify-clear-research-questions",
+    "title": "Hitchhiker’s guide to building statistical models",
+    "section": "How to specify clear research questions",
+    "text": "How to specify clear research questions\nA clearly defined research question should have two things, that can be defined outside of any statistical model:\n\na unit-specific quantity\n\nthis is the thing we want to know about, defined at the level of the unit of interest. It could be a single value \\(Y_i\\) for a given unit \\(i\\), or a counterfactual comparison of \\(Y_i\\) under different levels of another variable \\(X\\), which we could be write as, e.g.,: \\(Y_i^{X=1} - Y_i^{X=0}\\)1\n\na target population\n\nthis is the set of units over which we are aggregating our quantity.\n\n\nReturning to our chimp example, we can move to a somewhat more clearly stated question:\n\nResearch Question: For adult chimpanzees housed in UK zoos, what is the average effect on time-spent engaging with puzzles due to being placed in group-housing enclosure (&gt;2 chimps) compared to being placed in paired-housing enclosure (2 chimps)?\n\nNote that the word “effect” here is stating that we want to know how much of the chimpanzee \\(i\\)’s “puzzle-time” is because they are in a group-enclosure.\nThis is a causal question, and as such concerns what we would expect chimp \\(i\\)’s “puzzle-time” to be like in the counterfactual world where we observed them in the other type of enclosure. The unit-specific quantity that we are interested in here is \\(\\text{PuzzleTime}_i(\\text{Group-Housing}) - \\text{PuzzleTime}_i(\\text{Paired-Housing})\\), and these correspond to the values that are in the diff column in Table 1. We want the average of these across a sample that represents the target population\n\n\n\n\nTable 1: The unit specific quantity we are interested in is the average difference in chimpanzees’ puzzle-time when they are place in a group-enclosure compared to when they are placed in a paired-enclosure - these values are in the diff column\n\n\n\n\n\n\n\n\n\nchimp\npuzzlet_paired\npuzzlet_group\ndiff\n\n\n\n\nchimp-a\n23\n27\n4\n\n\nchimp-b\n30\n33\n3\n\n\nchimp-c\n35\n36\n1\n\n\nchimp-d\n24\n27\n3\n\n\n...\n...\n...\n...\n\n\n...\n...\n...\n...\n\n\nchimp-w\n19\n21\n2\n\n\nchimp-x\n24\n27\n3\n\n\nchimp-y\n17\n22\n5\n\n\nchimp-z\n21\n23\n2\n\n\n\n\n\n\n\n\n\n\n\nLundberg, I., Johnson, R., & Stewart, B. M. (2021). What is your estimand? Defining the target quantity connects statistical evidence to theory. American Sociological Review, 86(3), 532-565.",
+    "crumbs": [
+      "Hitchhiker's guide to building statistical models"
+    ]
+  },
+  {
+    "objectID": "17_build.html#footnotes",
+    "href": "17_build.html#footnotes",
+    "title": "Hitchhiker’s guide to building statistical models",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nMore complex questions involving interactions might then be framed in terms of comparisons of comparisons!↩︎\nThink of this as \\(\\frac{\\text{signal}}{\\text{noise}}\\). Including age doesn’t change the signal, but it does make the noise smaller.↩︎\nplease don’t do this!↩︎\nThese typically aim to achieve balanced covariates by using algorithms that match observations or re-weight them based on an estimated ‘propensity’ for receiving one treatment value versus another. In our chimp example, this would involve matching or weighting based on predicted probabilities from a model like: glm(enclosure_type ~ age + ..., family = binomial).↩︎\n  this is just as many things as I could think of in ~10 minutes! I don’t know anything about how zoos work, or about primatology, so I don’t know how many of these arrows are justified!↩︎",
+    "crumbs": [
+      "Hitchhiker's guide to building statistical models"
+    ]
+  },
+  {
+    "objectID": "csstests.html",
+    "href": "csstests.html",
+    "title": "Tests",
+    "section": "",
+    "text": "Notes for Wizards\n\n\n\n\n\nhere’s a note!\n\n\n\n\n\n\n\n\n\nHints\n\n\n\n\n\n\n\n\n\n\nlearning obj\n\n\nimportant\n\n\nsticky\n\n\n\n\n\nr tips\n\n\nstatbox\n\n\ninterprtation interprtation interprtation\n\n\nQuestion\n\n\nquestion\nwhat is your name?\nwhat is your favourite colour?\n\n\n\n\n\nSolution\n\n\n\nSolution 1. solution\nhello\n\n2+2\n\n[1] 4\n\n\n\n\n\n\n\nOptional hello my optional friend\n\n\n\nit’s nice to see you again\n\n\n\n\n\nthis is not a panel\n\n\nthis is a panel\n\n\nthis is a panel"
+  }
+]
