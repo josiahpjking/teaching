@@ -722,7 +722,7 @@ If you're excited by observational research, then you've got your work cut out! 
 
 
 ::: {.callout-tip collapse="true"}
-#### TODO What about descriptive work?
+#### What about descriptive work?
 
 ```{r}
 #| include: false
@@ -758,7 +758,7 @@ Suppose our goal is to estimate the prevalence of severe depression.
 
 This is purely descriptive: we're aiming to simply summarise the proportion of people with a diagnosis of severe depression. 
 
-To demonstrate, let's see pretend we complete data for the entire population. This is no longer an estimate, it's just the true value we're interested in:   
+To demonstrate, let's see pretend we have data for the **entire** population of interest. This is no longer an "estimate", it's just the true value we're wanting:   
 ```{r}
 table(dep_fullpop$status) |> 
   prop.table()
@@ -768,7 +768,7 @@ With access to the full population, we know that `r round(mean(dep_fullpop$statu
 
 In practice, however, we rarely have the full population data, and so instead we might conduct a survey on a random sample of people. But we still need to think carefully about the data generating process - we should think about the things that might lead people to decide to complete (or not complete) a questionnaire on depression. 
 
-Typically, people who are severely depressed a way less likely to ever fill out these surveys. 
+Typically, people who are severely depressed are far less likely to ever fill out these surveys. 
 So we can think of our population as containing people like this: 
 ```{r}
 head(dep_fullpop)
@@ -931,14 +931,25 @@ ggplot(df,aes(x=x,y=y,col=u))+geom_point()+
 :::
 
 ::: {.callout-tip collapse="true"}
-#### TODO do not simply control for *all* available variables
+#### Do not simply control for *all* available variables
 
+Hopefully the chimpanzee example illustrates why we should not always just shove *every* available variable in our model.  
 
+If we are interested in "how X affects Y", then a variable that sits on the pathway from X to Y (i.e., X causes M and M causes Y) would, if included in the model, actually remove part of the effect of X on Y from our estimated coefficient --- revisit the [Fire > Smoke > Alarm example above](#mapping-out-the-universe).  
 
 :::
 
 ::: {.callout-tip collapse="true"}
-#### TODO do not just simply control for all pre-treatment variables
+#### TODO do not just simply control for all 'pre-treatment' variables
+
+Perhaps because everybody loves a general "rule-of-thumb", you will sometimes find people who know that "we shouldn't just shove everything in the model", and instead opt to shove "everything that happens before X" in the model.  
+
+The language of 'treatment' here comes from the idea of investigating the effect of a given drug on some outcome. People are either in a "treated group" (they take the drug), or the "control group" (they don't take the drug), and we measure the outcome for both groups (see @fig-drug)
+
+To avoid situations of accidentally controlling for a variable on the pathway from Drug > Outcome, it's tempting to therefore simply control for anything that occurs before the Drug is taken/not-taken. This would be essentially any variable that could be in place of PT here.. 
+
+
+
 
       - zoo-budget past >> enclosure size
       - zoo-budget past >> stress
