@@ -1,5 +1,5 @@
 library(tidyverse)
-load(url("https://josiahpjking.github.io/teaching/misc/pptnames.rdata"))
+load("../Desktop/uoepsy_courses/teaching/docs/misc/pptnames.rdata")
 infl = pptnames[c(190,197,142,4,277,382,424)]
 pptnames = setdiff(pptnames,infl)
 pptnames1 = sample(pptnames, 100)
@@ -80,13 +80,13 @@ create_q1c <- function(group="alligators"){
   while(TRUE){
     df = tibble(
       pid = paste0("ppt_",1:45),
-      u_l = runif(45,.2,.9),
-      SRunease = map_dbl(u_l, ~sum(rbinom(9,5,.))),
-      dHRV= round(rnorm(45, -4.4 - 2.7*scale(u_l), 2.3),1)
+      u_l = pmax(0,pmin(1,rnorm(45,.5,.2))),
+      SRunease = map_dbl(u_l, ~sum(rbinom(8,10,.))),
+      dHRV= round(rnorm(45, -1.8 - 2.7*scale(u_l), 2.3),1)
     ) |> select(-u_l) 
 
     outlier = sample(1:30,1)
-    df$SRunease[outlier]<- sample(35:40,1)
+    df$SRunease[outlier]<- sample(70:80,1)
     df$dHRV[outlier] <- round(max(df$dHRV)+2*sd(df$dHRV))
     df$dHRV[sample(setdiff(1:45,outlier),16)] <- NA
     
@@ -113,59 +113,41 @@ create_2n3 <- function(group="alligators"){
     totN = 210
     df = tibble(
       ppt = sample(pptnames2, totN),
+      age = round(runif(totN,23,63)),
       opsys = c("iOS","android")[rbinom(totN, 1, .6)+1],
-      hphones = rbinom(totN, 1, .35),
-      volume = pmax(5,pmin(95,round(rchisq(totN, df=45+10*hphones)))),
+      hphones = rbinom(totN, 1, plogis(.5*scale(age))),
+      volume = pmax(5,pmin(95,round(rchisq(totN, df=45+10*hphones+
+                                             3*scale(age))))),
       rhythm = rep(letters[1:3],totN/3),
     )
     
     
-    head(df)
-  
+    
     # dimnames( model.matrix( ~ opsys + hphones + volume + rhythm + hphones:rhythm + volume:rhythm, data=df) )[[2]]
     lp = 
-      model.matrix( ~ opsys + hphones + scale(volume) + rhythm + 
+      model.matrix( ~ scale(age) + opsys + hphones + scale(volume) + rhythm + 
                       hphones:rhythm + scale(volume):rhythm, data=df) %*%
-      c(0,0,-.5,.3,1,1.5,.5,-.5,.5,.8)
+      c(0,-.1,0,-0.5,.1,1,1.5,.25,-.25,.5,.8)
     
-    df$SRU = pmin(45,pmax(0,round(20+rnorm(totN, lp, 1)*3.7)))
+    df$SRU = pmin(80,pmax(0,round(27+rnorm(totN, lp, 1.5)*7.7)))
     
-    # sjPlot::tab_model(
-    #   lm(SRU ~ (hphones + volume ) * rhythm, df),
-    #   lm(SRU ~ hphones + volume * rhythm, df)
-    # )
-    # 
-    # lm(SRU ~ (hphones + volume ) * rhythm, df) |>
-    #   effects::effect(term="volume*rhythm") |>
-    #   as.data.frame() |>
-    #   ggplot(aes(x=volume,y=fit,ymin=lower,ymax=upper,
-    #              col=rhythm))+
-    #   geom_line()+geom_ribbon(alpha=.1)
-    # 
-    # ggplot(df,aes(x=volume,y=SRU,col=rhythm))+
-    #   geom_point()+
-    #   geom_smooth(method=lm)
-    
-    
+
     # add in influencers
     dfi = tibble(
-      ppt = infl,
-      opsys = c("android","iOS")[c(1,2,2,2,1,1,2)],
+      ppt = sample(infl,7),
+      age = round(runif(7,17,70)),
+      opsys = c("android","iOS")[c(1,2,2,1,1,2,1)],
       hphones = rbinom(7,1,.4),
-      rhythm = c("a","c","c","a","b","b","c"),
-      volume = c(87,5,34,67,64,88,70),
-      SRU = c(max(df$SRU)+1.5*sd(df$SRU),
-              min(df$SRU)-2*sd(df$SRU),
-             mean(df$SRU),
-             mean(df$SRU)+2.3,mean(df$SRU)+2.8,
-             mean(df$SRU)-3.4,mean(df$SRU)+4.3)
+      rhythm = c("a","c","c","b","c","a","s"),
+      volume = c(88,11,82,55,46,62,55),
+      SRU = round(pmax(0,pmin(80,
+                        c(max(df$SRU)+1.5*sd(df$SRU),
+                          mean(df$SRU)+1.5*sd(df$SRU),
+                          min(df$SRU)-1.5*sd(df$SRU),
+                          84, 87, -2, 55))))
     )
-    df = slice_sample(bind_rows(df,dfi),prop=1)
-    
-    # ggplot(df,aes(x=volume,y=SRU,col=rhythm))+
-    #   geom_point()+
-    #   geom_smooth(method=lm)
-    
+    # ggplot(df,aes(x=volume,y=SRU,col=rhythm))+geom_point()+geom_smooth(method=lm)
+    df = slice_sample(bind_rows(df,dfi[1:6,]),prop=1)
     
     plp = 
       model.matrix( ~ 1 + scale(SRU) + opsys + 
@@ -174,52 +156,64 @@ create_2n3 <- function(group="alligators"){
     
     df$interested = rbinom(nrow(df), 1, plogis(plp))
     df$interested[sample(1:totN,.2*totN)] <- NA
-    glm(interested~1+hphones+rhythm,df,family=binomial) |> summary()
     
-    # mod = 
-    #   lm(EF ~ age+op_sys+env_concern*nudged, 
-    #      df |> mutate(nudged=factor(nudged)))
-    # mod_mi = 
-    #   lm(EF ~ age+op_sys+env_concern*nudged, 
-    #      df[df$isinf==1,] |> mutate(nudged=factor(nudged)))
-    # mod3 = glm(uninstalled ~ age + op_sys + 
-    #              env_concern + EF + nudged, 
-    #            data = df[df$nudged >= 1, ] |> mutate(nudged=factor(nudged)), 
-    #            family=binomial)
+    # add in stuff to clean
     
-    # checks <- c(
-    #   all(summary(mod_mi)$coefficients[7,4]>.05),
-    #   all(summary(mod_mi)$coefficients[8,4]<.05),
-    #   all(sign(summary(mod_mi)$coefficients[8,1])==-1),
-    #   summary(mod3)$coefficients[5,4]<.05,
-    #   sign(summary(mod3)$coefficients[5,1])==1
-    # )
-  
+    # do checks
+    modcheck <- function(mod,terms,dirs,sigs){
+      coeft = summary(mod)$coefficients[terms,]
+      c1 = all( sign(coeft[,1]) == dirs )
+      c2 = all((coeft[,4]<.05) == sigs)
+      if(c1 & c2){return(TRUE)}else{return(FALSE)}
+    }
+    
+    m1 = lm(SRU ~ age+opsys+hphones + volume * rhythm, df)
+    m1a = lm(SRU ~ (age+opsys+hphones + volume) * rhythm, df)
+    
+    i_torm = which(cooks.distance(m1) > quantile(cooks.distance(m1), .99))
+    m2 = lm(SRU ~ age+opsys+hphones + volume * rhythm, df[-i_torm, ])
+    m2a = lm(SRU ~ (age+opsys+hphones + volume) * rhythm, df[-i_torm, ])
     
     
-    # if(all(checks)){
-    #   df$age = as.character(df$age)
-    #   ww=sample(1:nrow(df),1)
-    #   df[ww,"age"] <- paste0(df[ww,"age"]," years")
-    #   ww=sample(1:nrow(df),1)
-    #   df[ww,"age"] <- paste0(df[ww,"age"],"yrs")
-    #   df$installed <- as.character(df$installed)
-    #   ww=sample(1:nrow(df),1)
-    #   df$installed[ww] <- paste0(df$installed[ww],".0")
-    #   ww=sample(1:nrow(df),1)
-    #   df$installed[ww] <- paste0(df$installed[ww],".0")
-    #   
-    #   return(list(
-    #     
-    #     df |> select(-ec_l,-installed,-uninstalled,-isinf),
-    #     
-    #     slice_sample(df |> select(ppt,installed), prop=1)
-    #     
-    #   ))
-    # }
-    if(1){
+    m3 = glm(interested~1+SRU+hphones+rhythm,df,family=binomial)
+    m3a = glm(interested~1+hphones+rhythm,df,family=binomial)
+    
+    
+    checks = c(
+      (modcheck(m1,c(8,9),c(1,1),c(T,F)) | modcheck(m1,c(8,9),c(1,1),c(F,T))),
+      (modcheck(m1a,c(14,15),c(1,1),c(T,F)) | modcheck(m1a,c(14,15),c(1,1),c(F,T))),
+      all(sort(abs(scale(cooks.distance(m1))[,1]),decreasing=TRUE)[1:3] > 3),
+      all(sort(abs(scale(cooks.distance(m1a))[,1]),decreasing=TRUE)[1:3] > 3),
+      modcheck(m2,c(8,9),c(1,1),c(T,T)),
+      modcheck(m2a,c(14,15),c(1,1),c(T,T)),
+      
+      all((summary(m3)$coefficients[c(2,4,5),4]<.05) == c(T,F,F)),
+      all((summary(m3a)$coefficients[c(3,4),4]<.05) == c(T,T))
+      
+    )
+    checks
+    
+      
+    if(all(checks)){
+      
+      df = slice_sample(bind_rows(df,dfi[7,]),prop=1)
+      
+      toch = sample(1:nrow(df),4)
+      df$opsys[toch] <- ifelse(df$opsys[toch]=="iOS","iOs","Android")
+      toch2 = sample(1:nrow(df),4)
+      df$age[toch2] <- paste0(df$age[toch2], " years")
+      df <- df |> mutate(
+        rhythm = case_when(
+          rhythm == "a" ~ 2,
+          rhythm == "b" ~ 1,
+          rhythm == "c" ~ 3,
+          TRUE ~ 4
+        )
+      )
+      
+
+      
       return(list(
-        
         df |> select(-interested),
         df |> select(ppt, interested) |> na.omit()
       ))
@@ -228,7 +222,6 @@ create_2n3 <- function(group="alligators"){
 }
 
 
-set.seed(987)
 p1a <- create_q1a()
 # chisq.test(table(p1a[,2:3]))
 p1b <- create_q1b()
@@ -239,14 +232,52 @@ p1c <- create_q1c()
 # p1c <- p1c[-which.max(resid(lm(SRunease~dHRV,p1c))), ]
 # with(p1c, cor.test(SRunease, dHRV))
 p23 <- create_2n3()
-p2 <- p23[[1]]
+p2 <- p23[[1]] #|> mutate(rhythm=factor(rhythm),age=parse_number(age))
 # lm(SRU ~ hphones + volume * rhythm, p2) |> summary()
 # lm(SRU ~ (hphones + volume) * rhythm, p2) |> summary()
 # # removing influencers
 # lm(SRU ~ hphones + volume * rhythm, p2 |> filter(!ppt %in% infl)) |> summary()
 # lm(SRU ~ (hphones + volume) * rhythm, p2 |> filter(!ppt %in% infl)) |> summary()
-
 p3 <- p23[[2]]
 # glm(interested ~ hphones + volume + rhythm, 
 #     full_join(p2,p3), family=binomial) |> summary()
+
+
+groups = c("unknown","analytical_adders","binomial_buzzards","calculating_capercaillies","estimating_eagles","frequency_fulmars","histogram_hares","jitterplot_jays","kurtosis_kites","likelihood_lapwings","outlier_otters","parameter_ptarmigans","quantile_quails","regression_ravens","standard-error_salmon","two-tailed_terns","variance_voles","winsorizing_wildcats")
+
+for(g in groups[1]){
+  pilotA <- create_q1a(group = g)
+  pilotB <- create_q1b(group = g)
+  pilotC <- create_q1c(group = g)
+  p23 <- create_2n3(group = g)
+  risset <- p23[[1]] 
+  followup <- p23[[2]]
+  save(pilotA,pilotB,pilotC,risset,followup,file = paste0(g,".RData"))
+}
+
+
+
+
+
+# get my data function.. 
+get_my_data <- function(group_name){
+  tryCatch(
+    suppressWarnings(load(url(paste0("https://uoepsy.github.io/usmr/2627/misc/",tolower(group_name),".RData")))),
+    
+    error=function(e) cat(paste0(c("No Data Found. Are you sure you used the correct group name?\nGroup names should have an underscore between the words. Choose from these:  ", paste0(
+      c("analytical_adders","binomial_buzzards","calculating_capercaillies","estimating_eagles","frequency_fulmars","histogram_hares","jitterplot_jays","kurtosis_kites","likelihood_lapwings","outlier_otters","parameter_ptarmigans","quantile_quails","regression_ravens","standard-error_salmon","two-tailed_terns","variance_voles","winsorizing_wildcats"),
+      collapse="\n")), "\n\n\nIf you cannot make this work with your exam number, please use get_my_data(\"unknown\")"))
+  )
+  
+  pilotA <<- pilotA
+  pilotB <<- pilotB
+  pilotC <<- pilotC
+  risset <<- risset
+  followup <<- followup
+}
+
+
+
+
+
 
