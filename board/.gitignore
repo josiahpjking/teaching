@@ -1,0 +1,8 @@
+/.quarto/
+**/*.quarto_ipynb
+/wipdocs/
+/.Rproj.user/
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
